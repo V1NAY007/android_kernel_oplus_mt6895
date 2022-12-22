@@ -68,6 +68,7 @@ struct io_uring_task {
 
 
 #if defined(CONFIG_IO_URING)
+struct sock *io_uring_get_socket(struct file *file);
 void __io_uring_cancel(bool cancel_all);
 void __io_uring_free(struct task_struct *tsk);
 bool io_is_uring_fops(struct file *file);
