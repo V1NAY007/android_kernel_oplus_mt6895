@@ -249,6 +249,15 @@ int mtk_afe_pcm_new(struct snd_soc_component *component,
 	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
 
 	size = afe->mtk_afe_hardware->buffer_bytes_max;
+	/*
+	 * Keep explicit preallocation instead of switching to
+	 * snd_pcm_set_managed_buffer_all(). MTK smartphone platforms drive the
+	 * AFE from audio SRAM / ADSP shared memory rather than ALSA-managed
+	 * DRAM, and .pcm_destruct still pairs with
+	 * snd_pcm_lib_preallocate_free_for_all(). The upstream switch to
+	 * managed buffers targets the small AFE window on MT8195/MT8188
+	 * Chromebooks and is not applicable here.
+	 */
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      afe->dev, size, size);
 

@@ -237,6 +237,10 @@ static int ucsi_displayport_vdm(struct typec_altmode *alt,
 				dp->header |= VDO_CMDT(CMDT_RSP_ACK);
 			break;
 		case DP_CMD_CONFIGURE:
+			if (count < 2) {
+				dp->header |= VDO_CMDT(CMDT_RSP_NAK);
+				break;
+			}
 			dp->data.conf = *data;
 			if (ucsi_displayport_configure(dp)) {
 				dp->header |= VDO_CMDT(CMDT_RSP_NAK);
@@ -295,6 +299,8 @@ void ucsi_displayport_remove_partner(struct typec_altmode *alt)
 	dp = typec_altmode_get_drvdata(alt);
 	if (!dp)
 		return;
+
+	cancel_work_sync(&dp->work);
 
 	dp->data.conf = 0;
 	dp->data.status = 0;
