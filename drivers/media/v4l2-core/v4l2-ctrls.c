@@ -4514,8 +4514,15 @@ void v4l2_ctrl_request_complete(struct media_request *req,
 			return;
 
 		ret = v4l2_ctrl_handler_init(hdl, (main_hdl->nr_of_buckets - 1) * 8);
-		if (!ret)
+		if (!ret) {
+			/* v4l2_ctrl_request_bind needs main_hdl->lock initialized */
+			if (!main_hdl->lock) {
+				v4l2_ctrl_handler_free(hdl);
+				kfree(hdl);
+				return;
+			}
 			ret = v4l2_ctrl_request_bind(req, hdl, main_hdl);
+		}
 		if (ret) {
 			v4l2_ctrl_handler_free(hdl);
 			kfree(hdl);

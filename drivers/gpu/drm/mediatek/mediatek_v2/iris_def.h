@@ -5,9 +5,12 @@
 
 #define IRIS_CFG_NUM	2
 
-#define IRIS_FIRMWARE_NAME	"../../odm/firmware/iris5.fw"
-#define IRIS_CCF1_FIRMWARE_NAME "../../odm/firmware/iris5_ccf1.fw"
-#define IRIS_CCF2_FIRMWARE_NAME "../../odm/firmware/iris5_ccf2.fw"
+/* fw_path[] already searches /odm/firmware/; a "../" prefix is rejected
+ * by name_contains_dotdot() in the firmware loader.
+ */
+#define IRIS_FIRMWARE_NAME	"iris5.fw"
+#define IRIS_CCF1_FIRMWARE_NAME "iris5_ccf1.fw"
+#define IRIS_CCF2_FIRMWARE_NAME "iris5_ccf2.fw"
 #define IRIS_CCF1_CALIBRATED_FIRMWARE_NAME "iris5_ccf1b.fw"
 #define IRIS_CCF2_CALIBRATED_FIRMWARE_NAME "iris5_ccf2b.fw"
 #define IRIS3_CHIP_VERSION	0x6933
